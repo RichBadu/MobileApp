@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mde.Project.Mobile.Views.Auth.RegisterPage"
+              xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             x:DataType="viewmodels:RegisterViewModel"
+            
+             BackgroundColor="#F8FAFC">
+
+    <ScrollView Padding="0,40,0,20">
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <VerticalStackLayout.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="Android" Value="-1"/>
+                    <On Platform="WinUI" Value="900"/>
+                </OnPlatform>
+            </VerticalStackLayout.WidthRequest>
+            <!-- Logo Placeholder -->
+                <Frame WidthRequest="100" HeightRequest="100" 
+                   CornerRadius="50" 
+                   BackgroundColor="#0D1B2A"
+                   HasShadow="True"
+                   BorderColor="#999999"
+                   HorizontalOptions="Center">
+                    <Label FontFamily="FaSolid" FontSize="60" Text="&#x54;" TextColor="#999999" VerticalOptions="Center"/>
+                </Frame>
+                <!-- App Title -->
+                <Label
+                Text="Create Account"
+                FontSize="32"
+                FontAttributes="Bold"
+                TextColor="{StaticResource ThemeColor}"
+                HorizontalOptions="Center"
+                />
+
+                <Frame CornerRadius="20"
+                   Padding="20"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   VerticalOptions="Center">
+
+                    <VerticalStackLayout Spacing="15">
+                        <!-- Display Name Entry -->
+                        <Entry Placeholder="Display Name" PlaceholderColor="Black" 
+                           Text="{Binding DisplayName}"
+                           TextColor="{StaticResource ThemeColor}"
+                           BackgroundColor="#F5F5F5"
+                           HeightRequest="50"/>
+
+
+                        <!-- Email Entry -->
+                        <Entry Placeholder="Email" PlaceholderColor="Black" 
+                            Text="{Binding Email}"
+                           Keyboard="Default"
+                           TextColor="{StaticResource ThemeColor}"
+                           BackgroundColor="#F5F5F5"
+                           HeightRequest="50"/>
+
+
+                        <!-- Password Entry -->
+                        <Entry Placeholder="Password" PlaceholderColor="Black" 
+                          Text="{Binding Password}"
+                           IsPassword="True"
+                           TextColor="#222222"
+                           BackgroundColor="#F5F5F5"
+                           HeightRequest="50"/>
+
+
+                        <!-- Confirm Password Entry -->
+                        <Entry Placeholder="Confirm Password" PlaceholderColor="Black" 
+                           Text="{Binding ConfirmPassword}"
+                           IsPassword="True"
+                           TextColor="#222222"
+                           BackgroundColor="#F5F5F5"
+                           HeightRequest="50"/>
+
+                        <Label  
+                        Text="{Binding Error}" 
+                           HorizontalOptions="Center"
+                           Style="{StaticResource ErrorLabel}" 
+                           IsVisible="{Binding Error, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+
+
+                        <!-- Register Button -->
+                        <Button Text="Register" 
+                            BackgroundColor="#0D1B2A"
+                            TextColor="White"
+                            HeightRequest="50"
+                            CornerRadius="8"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Command="{Binding RegisterCommand}"   />
+
+                        <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="Already have an account?" TextColor="#666666" FontSize="14"/>
+                            <Label Text="Login Here" TextColor="{StaticResource ThemeColor}" FontSize="14" FontAttributes="Bold">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+       
+    </ScrollView>
+</ContentPage>

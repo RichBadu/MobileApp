@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mde.Project.Mobile.Views.Categories.CategoryDetailPage"
+             xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             x:DataType="viewmodels:CategoryDetailViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8FAFC">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Padding="20,5,20,15" Spacing="15" HorizontalOptions="Center">
+                <VerticalStackLayout.WidthRequest>
+                    <OnPlatform x:TypeArguments="x:Double">
+                        <On Platform="Android" Value="-1"/>
+                        <On Platform="WinUI" Value="800"/>
+                    </OnPlatform>
+                </VerticalStackLayout.WidthRequest>
+              
+               
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,20">
+                    <!-- Back Button -->
+                    <Frame Grid.Column="0"
+                       WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       Padding="0"
+                       HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="←" 
+                           FontSize="30"
+                           TextColor="{StaticResource ThemeColor}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    </Frame>
+
+                    <!-- Title -->
+                    <Label Grid.Column="1"
+                       Text="Category Details" 
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource ThemeColor}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+
+                    <!-- Delete Button -->
+                    <Frame Grid.Column="2"
+                       WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       Padding="0"
+                       HasShadow="True"
+                       IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DeleteCategoryCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="🗑️" 
+                           FontSize="18"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    </Frame>
+                </Grid>
+
+                <VerticalStackLayout Spacing="15" 
+                                Margin="0,20"
+                                IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                    <!-- Icon -->
+                    <Frame WidthRequest="100"
+                       HeightRequest="100"
+                       CornerRadius="50"
+                       BackgroundColor="{Binding Color}"
+                       Padding="0"
+                       HasShadow="True"
+                       HorizontalOptions="Center">
+                        <Label Text="{Binding Icon}" 
+                           FontSize="50"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    </Frame>
+
+                    <Label Text="{Binding Name}" 
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource ThemeColor}"
+                       HorizontalOptions="Center"/>
+
+                <Label Text="{Binding MonthlyBudget, StringFormat='Budget: € {0:N2}',TargetNullValue='No budget'}" 
+                       FontSize="18"
+                       HorizontalOptions="Center"
+                       TextColor="{StaticResource ThemeColor}"/>
+                </VerticalStackLayout>
+
+                <!-- EDIT MODE: Input Fields -->
+                <VerticalStackLayout Spacing="15" 
+                                IsVisible="{Binding IsEditing}">
+
+                    <!-- Icon Input -->
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Poster" 
+                       FontSize="14" 
+                       TextColor="#666"
+                       HorizontalOptions="Center"/>
+
+                    <Frame WidthRequest="100"
+           HeightRequest="100"
+           CornerRadius="50"
+           BackgroundColor="{Binding Color}"
+           Padding="0"
+           HasShadow="True">
+                        <Entry Text="{Binding Icon}" 
+               FontSize="40"
+               MaxLength="2"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+               BackgroundColor="Transparent"
+               TextColor="White"
+               />
+                    </Frame>
+                </VerticalStackLayout>
+                <!-- Type Picker -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Type" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15,10"
+                           HasShadow="True"
+                           MinimumHeightRequest="50">
+                        <Picker SelectedItem="{Binding Type}" 
+                                FontSize="16"
+                                TextColor="#0D1B2A"
+                                VerticalOptions="Center">
+                            <Picker.Items>
+                                <x:String>Expense</x:String>
+                                <x:String>Income</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- Name Input -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Name" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                        <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15"
+                           HasShadow="True">
+                            <Entry Text="{Binding Name}" 
+                               FontSize="16"
+                               Placeholder="Category name"
+                               TextColor="{StaticResource ThemeColor}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Budget Input -->
+                    <VerticalStackLayout Spacing="5" IsVisible="{Binding Type, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Expense}">
+                        <Label Text="Monthly Budget" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                        <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15"
+                           HasShadow="True">
+                            <Entry Text="{Binding MonthlyBudget}" 
+                               Keyboard="Numeric"
+                               FontSize="16"
+                               Placeholder="0.00"
+                               TextColor="{StaticResource ThemeColor}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Color Picker -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Color" 
+           FontSize="14" 
+           TextColor="#666"/>
+                        <CollectionView ItemsSource="{Binding PresetColors}"
+                   HeightRequest="50">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Frame WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="{Binding .}"
+                       Padding="0"
+                       HasShadow="False"
+                       BorderColor="Transparent">
+                                        <Frame.Triggers>
+                                            <DataTrigger TargetType="Frame"
+                                   Binding="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoryDetailViewModel}}, Path=Color}"
+                                   Value="{Binding .}">
+                                                <Setter Property="BorderColor" Value="#0D1B2A"/>
+                                                <Setter Property="Scale" Value="1.2"/>
+                                            </DataTrigger>
+                                        </Frame.Triggers>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoryDetailViewModel}}, Path=SetColorCommand}"
+                            CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+
+                                    <Label>
+
+                                        <Label.Triggers>
+                                                <DataTrigger TargetType="Label"
+                                       Binding="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoryDetailViewModel}}, Path=Color}"
+                                       Value="{Binding .}">
+                                                    <Setter Property="IsVisible" Value="True"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+
+                <!-- VIEW MODE: Details Card -->
+                <Frame CornerRadius="15" 
+                   BackgroundColor="White" 
+                   HasShadow="True"
+                   Padding="20"
+                   IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                    <VerticalStackLayout Spacing="15">
+
+                        <!-- Color Info -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Color" 
+                               TextColor="#666" 
+                               FontSize="14"/>
+                            <Frame Grid.Column="1"
+                               WidthRequest="30"
+                               HeightRequest="30"
+                               CornerRadius="15"
+                               BackgroundColor="{Binding Color}"
+                               Padding="0"
+                               HasShadow="False"
+                               BorderColor="#DDD"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F0F0"/>
+
+                        <!-- Budget Info -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Monthly Budget" 
+                               TextColor="#666" 
+                               FontSize="14"/>
+                            <Label Grid.Column="1"
+                               Text="{Binding MonthlyBudget, StringFormat='€ {0:N2}',TargetNullValue='No budget'}" 
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource ThemeColor}"/>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- VIEW MODE: Edit Button -->
+                <Button Text="Edit Category" 
+                    BackgroundColor="{StaticResource ThemeColor}"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="12"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    Command="{Binding StartEditingCommand}"
+                    IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                <!-- EDIT MODE: Save & Cancel Buttons -->
+                <Grid ColumnDefinitions="*,*" 
+                  ColumnSpacing="10"
+                  IsVisible="{Binding IsEditing}">
+
+                    <!-- Cancel Button -->
+                    <Button Grid.Column="0"
+                        Text="Cancel" 
+                        BackgroundColor="#F5F5F5"
+                        TextColor="#666"
+                        HeightRequest="50"
+                        CornerRadius="12"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Command="{Binding CancelEditingCommand}"/>
+
+                    <!-- Save Button -->
+                    <Button Grid.Column="1"
+                        Text="Save Changes" 
+                        BackgroundColor="{StaticResource ThemeColor}"
+                        TextColor="White"
+                        HeightRequest="50"
+                        CornerRadius="12"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Command="{Binding SaveCategoryCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

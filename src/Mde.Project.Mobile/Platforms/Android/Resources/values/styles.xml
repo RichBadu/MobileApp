@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	<style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+		<item name="colorPrimary">#4A90E2</item>
+		<item name="colorPrimaryDark">#2E5C8A</item>
+		<item name="colorAccent">#4A90E2</item>
+		<item name="android:statusBarColor">#2E5C8A</item>
+		<item name="android:windowBackground">#FFFFFF</item>
+
+		<item name="windowNoTitle">true</item>
+		<item name="windowActionBar">false</item>
+	</style>
+</resources>

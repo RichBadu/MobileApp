@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mde.Project.Mobile.Views.RecurringTransactions.RecurringTransactionsPage"
+             xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             xmlns:models="clr-namespace:Mde.Project.Mobile.Core.Models;assembly=Mde.Project.Core"
+             x:DataType="viewmodels:RecurringTransactionViewModel"
+             x:Name="Page"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8FAFC">
+
+
+    <Grid>
+        <Grid HorizontalOptions="Center">
+            <Grid.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="Android" Value="-1"/>
+                    <On Platform="WinUI" Value="900"/>
+                </OnPlatform>
+            </Grid.WidthRequest>
+
+            <Grid RowDefinitions="Auto,*" Padding="20,50,20,15" >
+
+             
+                <VerticalStackLayout Grid.Row="0" Padding="20,5,20,15" Spacing="15">
+
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+
+                        <!-- Back Button -->
+                        <Frame Grid.Column="0"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                               CornerRadius="20"
+                               BackgroundColor="White"
+                               Padding="0"
+                               HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                            </Frame.GestureRecognizers>
+                            <Label Text="←" 
+                                   FontSize="30"
+                                   TextColor="{StaticResource ThemeColor}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Frame>
+
+                        <!-- Title -->
+                        <Label Grid.Column="1"
+                               Text="Recurring Transactions" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource ThemeColor}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+
+                        <!-- Add Button -->
+                        <Frame Grid.Column="2"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                               CornerRadius="20"
+                               BackgroundColor="{StaticResource ThemeColor}"
+                               Padding="0"
+                               HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AddRecurringCommand}"/>
+                            </Frame.GestureRecognizers>
+                            <Label Text="+" 
+                                   FontSize="24"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Frame>
+                    </Grid>
+
+                    <!-- Info Box -->
+                    <Frame CornerRadius="10"
+                           BackgroundColor="#E3F2FD"
+                           Padding="15"
+                           HasShadow="False"
+                           BorderColor="#2196F3">
+                        <Label TextColor="#1976D2" FontSize="13">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="ℹ️ " FontAttributes="Bold" TextColor="Black"/>
+                                    <!--PLATFORM TEXT-->
+                                    <Span TextColor="Black">
+                                        <Span.Text>
+                                            <OnPlatform x:TypeArguments="x:String">
+                                                <On Platform="Android" Value="These transactions will be automatically added on the set date. Swipe left to delete."/>
+                                                <On Platform="WinUI" Value="These transactions will be automatically added on the set date. Click delete button to remove."/>
+                                            </OnPlatform>
+                                        </Span.Text>
+                                    </Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Frame>
+
+                </VerticalStackLayout>
+
+                <!-- List Section -->
+                <ScrollView Grid.Row="1" Padding="20,0,20,20">
+
+
+                    <CollectionView ItemsSource="{Binding RecurringTransactions}"
+                                  SelectionMode="None">
+                        <!-- Empty State -->
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout Spacing="20" 
+                                               Padding="40"
+                                               VerticalOptions="Center">
+                                <Label Text="🔄" 
+                                       FontSize="64"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="No recurring transactions" 
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       TextColor="#666"/>
+                                <Label Text="Add your first recurring transaction to automatically track your budget" 
+                                       FontSize="14"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="#999"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+
+                        <!-- Item Template -->
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:RecurringTransaction">
+
+                                <Grid>
+
+                                    <!-- ANDROID SwipeView -->
+                                    <SwipeView>
+                                        <SwipeView.IsVisible>
+                                            <OnPlatform x:TypeArguments="x:Boolean">
+                                                <On Platform="Android" Value="True"/>
+                                                <On Platform="WinUI" Value="False"/>
+                                            </OnPlatform>
+                                        </SwipeView.IsVisible>
+
+                                        <SwipeView.RightItems>
+                                            <SwipeItems Mode="Reveal">
+                                                <SwipeItem
+                                        
+                                        BackgroundColor="#FF6B6B"
+                                        Command="{Binding BindingContext.DeleteRecurringCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}">
+                                                    <SwipeItem.IconImageSource>
+                                                        <FontImageSource
+                                                        Glyph="🗑️"
+                                                        Size="14" />
+                                                    </SwipeItem.IconImageSource>
+                                                </SwipeItem>
+
+                                            </SwipeItems>
+                                        </SwipeView.RightItems>
+
+                                        <!-- Mobile Content -->
+                                        <Frame CornerRadius="12"
+                       BackgroundColor="White"
+                       Padding="16"
+                       Margin="0,8"
+                       HasShadow="True">
+
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+
+                                                <VerticalStackLayout Grid.Column="0" 
+                                           Spacing="4"
+                                           VerticalOptions="Center">
+                                                    <Label Text="{Binding Name}" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#0D1B2A"
+                                   LineBreakMode="TailTruncation"/>
+
+                                                    <Label FontSize="12" 
+                                   TextColor="#999"
+                                   LineBreakMode="TailTruncation">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="{Binding Frequency}"/>
+                                                                <Span Text=" • "/>
+                                                                <Span Text="{Binding NextDueDate, StringFormat='{0:dd MMM yyyy}'}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </VerticalStackLayout>
+
+                                                <Label Grid.Column="1" 
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               HorizontalOptions="End">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Type}" Value="Income">
+                                                            <Setter Property="TextColor" Value="#4CAF50"/>
+                                                            <Setter Property="Text" Value="{Binding Amount, StringFormat='+ € {0:N2}'}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Type}" Value="Expense">
+                                                            <Setter Property="TextColor" Value="#FF6B6B"/>
+                                                            <Setter Property="Text" Value="{Binding Amount, StringFormat='- € {0:N2}'}"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+
+                                            </Grid>
+                                        </Frame>
+                                    </SwipeView>
+
+                                    <!-- WINDOWS-->
+                                    <Frame CornerRadius="12"
+                   BackgroundColor="White"
+                   Padding="16"
+                   Margin="0,8"
+                   HasShadow="True">
+                                        <Frame.IsVisible>
+                                            <OnPlatform x:TypeArguments="x:Boolean">
+                                                <On Platform="Android" Value="False"/>
+                                                <On Platform="iOS" Value="False"/>
+                                                <On Platform="WinUI" Value="True"/>
+                                            </OnPlatform>
+                                        </Frame.IsVisible>
+
+                                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+
+                                            <VerticalStackLayout Grid.Column="0" 
+                                       Spacing="4"
+                                       VerticalOptions="Center">
+                                                <Label Text="{Binding Name}" 
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#0D1B2A"
+                               LineBreakMode="TailTruncation"/>
+
+                                                <Label FontSize="12" 
+                               TextColor="#999"
+                               LineBreakMode="TailTruncation">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{Binding Frequency}"/>
+                                                            <Span Text=" • "/>
+                                                            <Span Text="{Binding NextDueDate, StringFormat='{0:dd MMM yyyy}'}"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </VerticalStackLayout>
+
+                                            <Label Grid.Column="1" 
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           HorizontalOptions="End"
+                           Margin="0,0,10,0">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Type}" Value="Income">
+                                                        <Setter Property="TextColor" Value="#4CAF50"/>
+                                                        <Setter Property="Text" Value="{Binding Amount, StringFormat='+ € {0:N2}'}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Type}" Value="Expense">
+                                                        <Setter Property="TextColor" Value="#FF6B6B"/>
+                                                        <Setter Property="Text" Value="{Binding Amount, StringFormat='- € {0:N2}'}"/>
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+
+                                            <!-- Delete Button -->
+                                            <Button Grid.Column="2"
+                            Text="🗑️"
+                            FontSize="18"
+                            BackgroundColor="#FF6B6B"
+                            TextColor="White"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            CornerRadius="8"
+                            Padding="0"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RecurringTransactionViewModel}}, Path=DeleteRecurringCommand}"
+                            CommandParameter="{Binding .}"/>
+
+                                        </Grid>
+                                    </Frame>
+
+                                </Grid>
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
+            </Grid>
+        </Grid>
+   
+    </Grid>
+
+</ContentPage>

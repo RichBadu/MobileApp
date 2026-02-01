@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mde.Project.Mobile.Views.RecurringTransactions.RecurringTransactionAddPage"
+                xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             x:DataType="viewmodels:RecurringTransactionAddViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8FAFC">
+
+
+    <Grid HorizontalOptions="Center" RowDefinitions="Auto,*,Auto"  Padding="20,50,20,15">
+            <Grid.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="Android" Value="-1"/>
+                    <On Platform="WinUI" Value="900"/>
+                </OnPlatform>
+            </Grid.WidthRequest>
+            
+            <!-- Header -->
+            <Grid Grid.Row="0" 
+               Padding="20,50,20,15"
+              ColumnDefinitions="Auto,*,Auto"
+                  >
+                <!-- Cancel Button -->
+                <Frame Grid.Column="0"
+                   WidthRequest="40"
+                   HeightRequest="40"
+                   CornerRadius="20"
+                   BackgroundColor="White"
+                   Padding="0"
+                   HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CancelCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="✕" 
+                       FontSize="20"
+                       TextColor="#999"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                </Frame>
+
+                <!-- Title -->
+                <Label Grid.Column="1"
+                   Text="New Recurring transactions" 
+                   FontSize="18" 
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource ThemeColor}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"/>
+            </Grid>
+
+            <!-- Form -->
+            <ScrollView Grid.Row="1" Padding="20,0">
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Name -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Name" 
+                           FontSize="14" 
+                           TextColor="#666"
+                           FontAttributes="Bold"/>
+                        <Frame CornerRadius="10"
+                           BackgroundColor="White"
+                           Padding="12"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                            <Entry Text="{Binding Name}"
+                               Placeholder="ex. rent, Netflix, salary..."
+                               PlaceholderColor="#999"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Amount -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Amount" 
+                           FontSize="14" 
+                           TextColor="#666"
+                           FontAttributes="Bold"/>
+                        <Frame CornerRadius="10"
+                           BackgroundColor="White"
+                           Padding="12"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                            <Entry Text="{Binding Amount}"
+                               Placeholder="0.00"
+                               Keyboard="Numeric"
+                               PlaceholderColor="#999"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Type Selector -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Type" 
+                           FontSize="14" 
+                           TextColor="#666"
+                           FontAttributes="Bold"/>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <!-- Expense -->
+                            <Frame Padding="16,10"
+                               CornerRadius="20"
+                               BackgroundColor="#F5F5F5"
+                               HasShadow="False"
+                               BorderColor="Transparent"
+                               HorizontalOptions="FillAndExpand">
+                                <Frame.Triggers>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding SelectedType}" Value="Expense">
+                                        <Setter Property="BackgroundColor" Value="#FFEBEE"/>
+                                        <Setter Property="BorderColor" Value="#f44336"/>
+                                    </DataTrigger>
+                                </Frame.Triggers>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RecurringTransactionAddViewModel}}, Path=SetTypeCommand}"
+                                                     CommandParameter="Expense"/>
+                                </Frame.GestureRecognizers>
+
+                                <Label Text="💸 Expense" 
+                                   FontSize="14" 
+                                   TextColor="#666"
+                                   HorizontalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding SelectedType}" Value="Expense">
+                                            <Setter Property="TextColor" Value="#f44336"/>
+                                            <Setter Property="FontAttributes" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Frame>
+
+                            <!-- Income -->
+                            <Frame Padding="16,10"
+                               CornerRadius="20"
+                               BackgroundColor="#F5F5F5"
+                               HasShadow="False"
+                               BorderColor="Transparent"
+                               HorizontalOptions="FillAndExpand">
+                                <Frame.Triggers>
+                                    <DataTrigger TargetType="Frame" Binding="{Binding SelectedType}" Value="Income">
+                                        <Setter Property="BackgroundColor" Value="#E8F5E9"/>
+                                        <Setter Property="BorderColor" Value="#4CAF50"/>
+                                    </DataTrigger>
+                                </Frame.Triggers>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RecurringTransactionAddViewModel}}, Path=SetTypeCommand}"
+                                                     CommandParameter="Income"/>
+                                </Frame.GestureRecognizers>
+
+                                <Label Text="💰 Income" 
+                                   FontSize="14" 
+                                   TextColor="#666"
+                                   HorizontalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding SelectedType}" Value="Income">
+                                            <Setter Property="TextColor" Value="#4CAF50"/>
+                                            <Setter Property="FontAttributes" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Frame>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!-- Category -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Category" 
+                           FontSize="14" 
+                           TextColor="#666"
+                           FontAttributes="Bold"/>
+                        <Frame CornerRadius="10"
+                           BackgroundColor="White"
+                           Padding="12"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                            <Picker ItemsSource="{Binding Categories}"
+                                SelectedItem="{Binding SelectedCategory}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="Selecteer categorie"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Frequency -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Frequency" 
+                           FontSize="14" 
+                           TextColor="#666"
+                           FontAttributes="Bold"/>
+                        <Frame CornerRadius="10"
+                           BackgroundColor="White"
+                           Padding="12"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                            <Picker ItemsSource="{Binding Frequencies}"
+                                SelectedItem="{Binding SelectedFrequency}"
+                                Title="Selecteer frequentie"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Day of Month (Monthly/Yearly) -->
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding ShowDayOfMonth}">
+                        <Label Text="Day of the month (1-31)" 
+           FontSize="14" 
+           TextColor="#666"
+           FontAttributes="Bold"/>
+                        <Frame CornerRadius="10"
+           BackgroundColor="White"
+           Padding="12"
+           HasShadow="False"
+           BorderColor="#E0E0E0">
+                            <Entry Text="{Binding DayOfMonth}"
+               Placeholder="bijv. 1, 15, 25..."
+               Keyboard="Numeric"
+               PlaceholderColor="#999"
+               MaxLength="2"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Day of Week (Weekly) -->
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding ShowDayOfWeek}">
+                        <Label Text="Day of the week" 
+                           FontSize="14" 
+                           TextColor="#666"
+                           FontAttributes="Bold"/>
+                        <Frame CornerRadius="10"
+                           BackgroundColor="White"
+                           Padding="12"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                            <Picker ItemsSource="{Binding DaysOfWeek}"
+                                SelectedItem="{Binding SelectedDayOfWeek}"
+                                Title="Selecteer dag"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Save Button -->
+            <Frame Grid.Row="2"
+               Padding="20"
+               BackgroundColor="Transparent"
+               HasShadow="False">
+                <Button Text="Opslaan"
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="{StaticResource ThemeColor}"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    HeightRequest="50"
+                    IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding IsSaving}" Value="True">
+                            <Setter Property="Text" Value="Opslaan..."/>
+                            <Setter Property="BackgroundColor" Value="#999"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </Frame>
+        </Grid>
+
+</ContentPage>

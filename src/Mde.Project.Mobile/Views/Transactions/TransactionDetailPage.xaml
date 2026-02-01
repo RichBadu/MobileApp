@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mde.Project.Mobile.Views.Transactions.TransactionDetailPage"
+             xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             x:DataType="viewmodels:TransactionDetailViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8FAFC">
+
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Padding="20,5,20,15" Spacing="15" HorizontalOptions="Center">
+                    <VerticalStackLayout.WidthRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="Android" Value="-1"/>
+                            <On Platform="WinUI" Value="800"/>
+                        </OnPlatform>
+                    </VerticalStackLayout.WidthRequest>
+             
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,20">
+
+                    <!-- Back Button -->
+                    <Frame Grid.Column="0"
+                       WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       Padding="0"
+                       HasShadow="True"
+                       IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="←" 
+                           FontSize="30"
+                           TextColor="{StaticResource ThemeColor}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                       />
+                </Frame>
+                    <!-- Title -->
+                    <Label Grid.Column="1"
+                       Text="Transaction Details" 
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource ThemeColor}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+
+                    <!-- Delete Button -->
+                    <Frame Grid.Column="2"
+                       WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       Padding="0"
+                       HasShadow="True"
+                       IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DeleteTransactionCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="🗑️" 
+                           FontSize="18"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    </Frame>
+                </Grid>
+                 
+                <VerticalStackLayout Spacing="10" 
+                                Margin="0,20"
+                                IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                    <Label Text="{Binding Category.Icon}" 
+                       FontSize="60"
+                       HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding FormattedAmount}" 
+                       FontSize="36"
+                       FontAttributes="Bold"
+                       TextColor="{Binding AmountColor}"
+                       HorizontalOptions="Center"/>
+                    <Label Text="{Binding Name}" 
+           FontSize="18"
+           FontAttributes="Bold"
+           TextColor="#0D1B2A"
+           HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding Description}" 
+                       FontSize="16"
+                       TextColor="#999"
+                       HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="15" 
+                                IsVisible="{Binding IsEditing}">
+
+                        <!--edit-->
+                    <!--Category input-->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Category" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15,10"
+                           HasShadow="True"
+                           MinimumHeightRequest="50">
+                        <Picker ItemsSource="{Binding Categories}"
+                                ItemDisplayBinding="{Binding Name}"
+                                SelectedItem="{Binding Category}"
+                                FontSize="16"
+                                TextColor="#0D1B2A"
+                                VerticalOptions="Center"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!--Name input-->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Name" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15"
+                           HasShadow="True">
+                        <Entry Text="{Binding Name}" 
+                               FontSize="16"
+                               Placeholder="Transaction name"
+                                TextColor="#0D1B2A"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- Amount Input -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Amount" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15"
+                           HasShadow="True">
+                        <Entry Text="{Binding Amount}" 
+                               Keyboard="Numeric"
+                               FontSize="16"
+                               Placeholder="0.00"
+                                TextColor="#0D1B2A"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- Description Input -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Description (optional)" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15"
+                           HasShadow="True">
+                        <Entry Text="{Binding Description}" 
+                               FontSize="16"
+                               TextColor="#0D1B2A"/>
+                    </Frame>
+                </VerticalStackLayout>
+                    
+                <!-- Type Picker -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Type" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+                           BackgroundColor="White" 
+                           Padding="15,10"
+                           HasShadow="True"
+                           MinimumHeightRequest="50">
+                        <Picker SelectedItem="{Binding Type}" 
+                                FontSize="16"
+                                TextColor="#0D1B2A"
+                                VerticalOptions="Center">
+                            <Picker.Items>
+                                <x:String>Income</x:String>
+                                <x:String>Expense</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Frame>
+                </VerticalStackLayout>
+                    
+                <!-- Date Picker -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Select a date" 
+                    FontSize="14" 
+                    TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+    BackgroundColor="White" 
+    Padding="15,10"
+    HasShadow="True"
+    MinimumHeightRequest="50">
+                        <DatePicker Date="{Binding Date}" 
+             FontSize="16"
+             TextColor="#0D1B2A"
+             VerticalOptions="Center"/>
+                    </Frame>
+                </VerticalStackLayout>
+                <!-- Time Picker -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Select a time" 
+                      FontSize="14" 
+                      TextColor="#666"/>
+                    <Frame CornerRadius="12" 
+      BackgroundColor="White" 
+      Padding="15,10"
+      HasShadow="True"
+      MinimumHeightRequest="50">
+                        <TimePicker Time="{Binding Time}" 
+               FontSize="16"
+               TextColor="#0D1B2A"
+               VerticalOptions="Center"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+
+                <!-- VIEW MODE: Details Card -->
+                <Frame CornerRadius="15" 
+                   BackgroundColor="White" 
+                   HasShadow="True"
+                   Padding="20"
+                   IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+                    <VerticalStackLayout Spacing="15">
+
+                        <!-- Category -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Category" 
+                               TextColor="#666" 
+                               FontSize="14"/>
+                            <HorizontalStackLayout Grid.Column="1" Spacing="8">
+                                <Label Text="{Binding Category.Icon}" 
+                                   FontSize="18"/>
+                                <Label Text="{Binding Category.Name}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource ThemeColor}"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F0F0"/>
+
+                        <!-- Date -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Date" 
+                               TextColor="#666" 
+                               FontSize="14"/>
+                            <Label Grid.Column="1"
+                               Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" 
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource ThemeColor}"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F0F0"/>
+
+                        <!-- Time -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Time" 
+                               TextColor="#666" 
+                               FontSize="14"/>
+                            <Label Grid.Column="1"
+                               Text="{Binding Date, StringFormat='{0:HH:mm}'}" 
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource ThemeColor}"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F0F0"/>
+
+                        <!-- Type -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Type" 
+                               TextColor="#666" 
+                               FontSize="14"/>
+                            <Label Grid.Column="1"
+                               Text="{Binding Type}" 
+                               FontSize="14"
+                               FontAttributes="Bold">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" 
+                                           Binding="{Binding Type}" 
+                                           Value="Income">
+                                        <Setter Property="TextColor" Value="#4CAF50"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" 
+                                           Binding="{Binding Type}" 
+                                           Value="Expense">
+                                        <Setter Property="TextColor" Value="#FF6B6B"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Receipt Photo Section -->
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Receipt Photo" 
+                       TextColor="#666" 
+                       FontSize="14"/>
+
+                    <Frame CornerRadius="12" 
+                       BackgroundColor="White" 
+                       Padding="10"
+                       HasShadow="True"
+                       IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
+
+                        <Grid>
+
+                            <VerticalStackLayout VerticalOptions="Center" 
+                               HorizontalOptions="Center"
+                               Spacing="10"
+                               IsVisible="{Binding HasPhoto, Converter={StaticResource InvertedBoolConverter}}">
+                                <Label Text="🖼️" FontSize="50" HorizontalOptions="Center"/>
+                                <Label Text="No photo available" 
+                       FontSize="13"
+                       TextColor="#999"
+                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+
+                            <Image Source="{Binding PhotoPath}"
+                   Aspect="AspectFit"
+                   HeightRequest="200"
+                   IsVisible="{Binding HasPhoto}"/>
+                        </Grid>
+                    </Frame>
+                    <VerticalStackLayout Spacing="10" 
+                        IsVisible="{Binding IsEditing}">
+
+                        <!-- Photo Preview EDIT -->
+                        <Frame CornerRadius="12"
+               BackgroundColor="White"
+               Padding="10"
+               HasShadow="True"
+               IsVisible="{Binding HasPhoto}">
+
+                            <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+                                <!-- Photo Image -->
+                                <Image Grid.Row="0"
+                       Source="{Binding PhotoPath}"
+                       Aspect="AspectFit"
+                       HeightRequest="200"
+                       BackgroundColor="#F5F5F5"/>
+
+                                <!-- Remove Photo Button -->
+                                <Button Grid.Row="1"
+                        Text="Remove Photo"
+                        BackgroundColor="#FF6B6B"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Command="{Binding RemovePhotoCommand}"/>
+                            </Grid>
+                        </Frame>
+
+                        <!-- Photo Buttons-->
+                        <Grid ColumnDefinitions="*,*" 
+                          ColumnSpacing="10"
+                          IsVisible="{Binding HasPhoto, Converter={StaticResource InvertedBoolConverter}}">
+
+                            <!-- Take Photo Button -->
+                            <Button Grid.Column="0"
+                                Text="📸 Take"
+                                BackgroundColor="{StaticResource ThemeColor}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Command="{Binding TakePhotoCommand}"/>
+
+                            <!-- Pick Photo Button -->
+                            <Button Grid.Column="1"
+                                Text="🖼️ Pick"
+                                BackgroundColor="{StaticResource ThemeColor}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Command="{Binding PickPhotoCommand}"/>
+                        </Grid>
+
+                        <!-- Replace Photo Buttons-->
+                        <Grid ColumnDefinitions="*,*" 
+                          ColumnSpacing="10"
+                          IsVisible="{Binding HasPhoto}">
+
+                            <!-- Replace with Camera -->
+                            <Button Grid.Column="0"
+                                Text="📸 Retake"
+                                BackgroundColor="{StaticResource ThemeColor}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Command="{Binding TakePhotoCommand}"/>
+
+                            <!-- Replace with Gallery -->
+                            <Button Grid.Column="1"
+                                Text="🖼️ Replace"
+                                BackgroundColor="{StaticResource ThemeColor}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Command="{Binding PickPhotoCommand}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+
+
+           
+
+                <!-- VIEW MODE: Edit Button -->
+                <Button Text="Edit Transaction" 
+                    BackgroundColor="{StaticResource ThemeColor}"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="12"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    Command="{Binding StartEditingCommand}"
+                    IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                <!-- EDIT MODE: Save & Cancel Buttons -->
+                <Grid ColumnDefinitions="*,*" 
+                  ColumnSpacing="10"
+                  IsVisible="{Binding IsEditing}">
+
+                    <!-- Cancel Button -->
+                    <Button Grid.Column="0"
+                        Text="Cancel" 
+                        BackgroundColor="#F5F5F5"
+                        TextColor="#666"
+                        HeightRequest="50"
+                        CornerRadius="12"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Command="{Binding CancelEditingCommand}"/>
+
+                    <!-- Save Button -->
+                    <Button Grid.Column="1"
+                        Text="Save Changes" 
+                        BackgroundColor="{StaticResource ThemeColor}"
+                        TextColor="White"
+                        HeightRequest="50"
+                        CornerRadius="12"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Command="{Binding SaveTransactionCommand}"/>
+                </Grid>
+
+
+            </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

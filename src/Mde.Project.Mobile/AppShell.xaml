@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+       x:Class="Mde.Project.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:auth="clr-namespace:Mde.Project.Mobile.Views.Auth"
+    xmlns:dashboard="clr-namespace:Mde.Project.Mobile.Views.Dashboard"
+    xmlns:transactions ="clr-namespace:Mde.Project.Mobile.Views.Transactions"
+    xmlns:stats ="clr-namespace:Mde.Project.Mobile.Views.Stats"
+    xmlns:settings ="clr-namespace:Mde.Project.Mobile.Views.Settings"
+
+
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent
+        Title="Login"
+        Shell.FlyoutBehavior="Disabled"
+        ContentTemplate="{DataTemplate auth:LoginPage}"
+        Route="login" />
+   
+    <ShellContent
+        Route="register"
+        Shell.FlyoutBehavior="Disabled"
+        ContentTemplate="{DataTemplate auth:RegisterPage}"/>
+
+    <TabBar Route="main">
+
+        <!-- Home Tab -->
+        <Tab Title="Home" Icon="{FontImage FontFamily=FaSolid, Glyph=&#xf015;, Color={StaticResource ThemeColor}}">
+            <ShellContent Route="home" ContentTemplate="{DataTemplate dashboard:HomePage}" />
+        </Tab>
+
+        <!-- Stats Tab -->
+        <Tab Title="Stats" Icon="{FontImage FontFamily=FaSolid, Glyph=&#xf201;, Color={StaticResource ThemeColor}}">
+            <ShellContent Route="stats" ContentTemplate="{DataTemplate stats:StatsPage}"/>
+
+
+        </Tab>
+       
+        <!-- Transactions Tab -->
+        <Tab Route="transactionsTab" Title="Transactions" Icon="{FontImage FontFamily=FaSolid, Glyph=&#xf0ca;, Color={StaticResource ThemeColor}}">
+            <ShellContent Route="transactions" ContentTemplate="{DataTemplate transactions:TransactionPage}" />
+        </Tab>
+
+        <!-- Settings Tab -->
+        <Tab Title="Settings" Icon="{FontImage FontFamily=FaSolid, Glyph=&#xf013;, Color={StaticResource ThemeColor}}">
+            <ShellContent Route="settings" ContentTemplate="{DataTemplate settings:SettingsPage}" />
+
+
+
+        </Tab>
+
+    </TabBar>
+
+</Shell>

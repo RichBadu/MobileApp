@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             x:Class="Mde.Project.Mobile.Views.Stats.StatsPage"
+             x:DataType="viewmodels:StatsViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8FAFC">
+
+    <ScrollView Padding="20,50,20,15">
+        <VerticalStackLayout Padding="20,5,20,15" Spacing="15">
+            <VerticalStackLayout.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="Android" Value="-1"/>
+                    <On Platform="WinUI" Value="900"/>
+                </OnPlatform>
+            </VerticalStackLayout.WidthRequest>
+          
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,10">
+                    <!-- Previous Month -->
+                    <Frame Grid.Column="0"
+                       WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       Padding="0"
+                       HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PreviousMonthCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="◀" 
+                           FontSize="18"
+                           TextColor="{StaticResource ThemeColor}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    </Frame>
+
+                    <!-- Month & Year -->
+                    <Label Grid.Column="1"
+                       Text="{Binding MonthYearDisplay}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource ThemeColor}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+
+                    <!-- Next Month -->
+                    <Frame Grid.Column="2"
+                       WidthRequest="40"
+                       HeightRequest="40"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       Padding="0"
+                       HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NextMonthCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="▶" 
+                           FontSize="18"
+                           TextColor="{StaticResource ThemeColor}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    </Frame>
+                </Grid>
+
+                <!--Total Expenses -->
+                <Frame CornerRadius="15"
+                   Padding="25"
+                   HasShadow="True"
+                   HeightRequest="135"
+                   BorderColor="Transparent">
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color = "{StaticResource ThemeColor}" Offset="0.0" />
+                            <GradientStop Color="#1565C0" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+
+                    <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                        <Label Text="Total Spent" 
+                           FontSize="14"
+                           TextColor="White"
+                           Opacity="0.9"
+                           HorizontalOptions="Center"/>
+                        <Label Text="{Binding TotalExpenses, StringFormat='€ {0:N2}'}" 
+                           FontSize="36"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Bar Chart Section -->
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Expense Per Category" 
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource ThemeColor}"/>
+
+                    <Frame CornerRadius="12"
+                       BackgroundColor="White"
+                       Padding="15"
+                       HasShadow="True"
+                       HeightRequest="280">
+                        <lvc:CartesianChart Series="{Binding CategorySeries}"
+                            XAxes="{Binding CategoryXAxes}"
+                            YAxes="{Binding CategoryYAxes}"
+                            LegendPosition="Hidden"
+                            HeightRequest="280" />
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- Line Chart Section -->
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Trend Past 6 months" 
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource ThemeColor}"/>
+
+                    <Frame CornerRadius="12"
+                       BackgroundColor="White"
+                       Padding="15"
+                       HasShadow="True"
+                       HeightRequest="300">
+                        <lvc:CartesianChart Series="{Binding TrendSeries}"
+                            XAxes="{Binding TrendXAxes}"
+                            YAxes="{Binding TrendYAxes}"
+                            LegendPosition="Hidden"
+                            HeightRequest="280" />
+                    </Frame>
+                </VerticalStackLayout>
+
+
+
+            </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

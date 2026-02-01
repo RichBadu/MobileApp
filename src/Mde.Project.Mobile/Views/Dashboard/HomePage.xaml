@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mde.Project.Mobile.Views.Dashboard.HomePage"
+             xmlns:viewmodels="clr-namespace:Mde.Project.Mobile.ViewModels"
+             xmlns:models="clr-namespace:Mde.Project.Mobile.Core.Models;assembly=Mde.Project.Core"
+             xmlns:helpers="clr-namespace:Mde.Project.Core.Helpers;assembly=Mde.Project.Core"
+             x:DataType="viewmodels:HomeViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8FAFC">
+
+    <Grid>
+        <ScrollView Padding="20,50,20,15">
+
+            <VerticalStackLayout Padding="20,5,20,15" Spacing="15">
+                <VerticalStackLayout.WidthRequest>
+                    <OnPlatform x:TypeArguments="x:Double">
+                        <On Platform="Android" Value="-1"/>
+                        <On Platform="WinUI" Value="900"/>
+                    </OnPlatform>
+                </VerticalStackLayout.WidthRequest>
+
+                <!-- Month Selector -->
+                    <Frame CornerRadius="15" 
+                       BackgroundColor="White" 
+                       HasShadow="True"
+                       Padding="15,10"
+                       Margin="0">
+                        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Button Text="&lt;" 
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource ThemeColor}"
+                                FontSize="18"
+                                Command="{Binding PreviousMonthCommand}"
+                                WidthRequest="35"
+                                HeightRequest="35"
+                                Padding="0"/>
+
+                            <Label Text="{Binding CurrentMonth}" 
+                               FontSize="16" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               TextColor="#0D1B2A"
+                               MinimumWidthRequest="120"
+                               HorizontalTextAlignment="Center"/>
+
+                            <Button Text="&gt;" 
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource ThemeColor}"
+                                FontSize="18"
+                                Command="{Binding NextMonthCommand}"
+                                WidthRequest="35"
+                                HeightRequest="35"
+                                Padding="0"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <!-- Balance Card -->
+                    <Frame CornerRadius="20"
+                       BackgroundColor="{StaticResource ThemeColor}"
+                       HasShadow="True"
+                       Padding="20">
+                        <VerticalStackLayout Spacing="15">
+
+                            <!-- Total Balance -->
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="Total Balance"
+                                   TextColor="White"
+                                   FontSize="14"
+                                   HorizontalOptions="Center"/>
+                                <Label Text="{Binding TotalBalance, StringFormat='€ {0:N2}'}"
+                                   TextColor="White"
+                                   FontSize="36"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <!-- Income & Expense (Fixed Grid!) -->
+                            <Grid ColumnDefinitions="Auto,Auto,20,Auto,Auto" 
+                              HorizontalOptions="Center"
+                              ColumnSpacing="8">
+                                <!-- Income -->
+                                <Label Grid.Column="0" 
+                                   Text="Income:" 
+                                   FontSize="14"
+                                   TextColor="#B0B0B0"
+                                   VerticalOptions="Center"/>
+                                <Label Grid.Column="1"
+                                   Text="{Binding MonthlyIncome, StringFormat='€ {0:N2}'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#4CAF50"
+                                   VerticalOptions="Center"/>
+
+                                <!-- Spacer (Grid.Column="2") -->
+
+                                <!-- Expenses -->
+                                <Label Grid.Column="3" 
+                                   Text="Expenses:" 
+                                   FontSize="14"
+                                   TextColor="#B0B0B0"
+                                   VerticalOptions="Center"/>
+                                <Label Grid.Column="4"
+                                   Text="{Binding MonthlyExpenses, StringFormat='€ {0:N2}'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#FF6B6B"
+                                   VerticalOptions="Center"/>
+                            </Grid>
+
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Top Categories Section (With Visibility!) -->
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding HasCategories}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                               Text="Top 5 Categories" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource ThemeColor}"/>
+
+                            <Label Grid.Column="1"
+                               Text="View All" 
+                               FontSize="14"
+                               TextColor="{StaticResource ThemeColor}"
+                               TextDecorations="Underline">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewAllCategoriesCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+
+                        <Frame CornerRadius="15" 
+                           BackgroundColor="White" 
+                           HasShadow="True"
+                           Padding="15">
+                            <CollectionView ItemsSource="{Binding TopCategories}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="helpers:CategoryWithSpending">
+                                        <Grid ColumnDefinitions="40,*,Auto" 
+                                          Padding="0,10"
+                                          ColumnSpacing="10">
+
+                                            <!-- Category Icon -->
+                                            <Frame Grid.Column="0" 
+                                               WidthRequest="40" 
+                                               HeightRequest="40"
+                                               CornerRadius="20"
+                                               BackgroundColor="{Binding Color}"
+                                               Padding="0"
+                                               HasShadow="False">
+                                                <Label Text="{Binding Icon}" 
+                                                   FontSize="20"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                            </Frame>
+
+                                            <!-- Category Name & Budget Info -->
+                                            <VerticalStackLayout Grid.Column="1" 
+                                                            Spacing="2"
+                                                            VerticalOptions="Center">
+                                                <Label Text="{Binding Name}" 
+                                                   FontSize="16"
+                                                   TextColor="#0D1B2A"/>
+                                                <Label FontSize="12"
+                                                   TextColor="#999999">
+                                                    <Label.Text>
+                                                        <MultiBinding StringFormat="€{0:N0} / €{1:N0}">
+                                                            <Binding Path="SpentThisMonth"/>
+                                                            <Binding Path="MonthlyBudget"/>
+                                                        </MultiBinding>
+                                                    </Label.Text>
+                                                </Label>
+                                            </VerticalStackLayout>
+
+                                            <!-- Spent Amount -->
+                                            <Label Grid.Column="2" 
+                                               Text="{Binding SpentThisMonth, StringFormat='€ {0:N0}'}" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"
+                                               TextColor="{Binding Color}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Empty State for Categories -->
+                    <Frame CornerRadius="15" 
+                       BackgroundColor="White" 
+                       HasShadow="True"
+                       Padding="30,20"
+                       IsVisible="{Binding HasCategories, Converter={StaticResource InvertedBoolConverter}}">
+                        <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                            <Label Text="📊" 
+                               FontSize="48" 
+                               HorizontalOptions="Center"/>
+                            <Label Text="No Data to show" 
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#666666"
+                               HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Recent Transactions Section (With Visibility!) -->
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding HasTransactions}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                               Text="Recent Transactions" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="#0D1B2A"/>
+
+                            <Label Grid.Column="1"
+                               Text="View All" 
+                               FontSize="14"
+                               TextColor="{StaticResource ThemeColor}"
+                               TextDecorations="Underline">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewAllTranscationsCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+
+                        <Frame CornerRadius="15" 
+                           BackgroundColor="White" 
+                           HasShadow="True"
+                           Padding="15">
+                            <CollectionView ItemsSource="{Binding RecentTransactions}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:TransactionRecord">
+                                        <Grid ColumnDefinitions="*,Auto" 
+                                          Padding="0,10"
+                                          ColumnSpacing="10">
+
+                                            <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                                <Label Text="{Binding Name}" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#0D1B2A"/>
+
+                                                <Label Text="{Binding Date, StringFormat='{0:dd MMM yyyy}'}" 
+                                                   FontSize="12"
+                                                   TextColor="#999999"/>
+                                            </VerticalStackLayout>
+
+                                            <Label Grid.Column="1" 
+                                               Text="{Binding Amount, StringFormat='{0:N2}'}" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" 
+                                                           Binding="{Binding Type}" 
+                                                           Value="Income">
+                                                        <Setter Property="TextColor" Value="#4CAF50"/>
+                                                        <Setter Property="Text" Value="{Binding Amount, StringFormat='+ € {0:N2}'}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" 
+                                                           Binding="{Binding Type}" 
+                                                           Value="Expense">
+                                                        <Setter Property="TextColor" Value="#FF6B6B"/>
+                                                        <Setter Property="Text" Value="{Binding Amount, StringFormat='- € {0:N2}'}"/>
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Empty State for Transactions -->
+                    <Frame CornerRadius="15" 
+                       BackgroundColor="White" 
+                       HasShadow="True"
+                       Padding="30,20"
+                       IsVisible="{Binding HasTransactions, Converter={StaticResource InvertedBoolConverter}}">
+                        <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                            <Label Text="💰" 
+                               FontSize="48" 
+                               HorizontalOptions="Center"/>
+                        <Label Text="No transactions yet" 
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#666666"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    </Frame>
+
+                </VerticalStackLayout>
+         
+        </ScrollView>
+
+        <!-- Floating Action Button -->
+        <Frame WidthRequest="60"
+               HeightRequest="60"
+               CornerRadius="30"
+               BackgroundColor="{StaticResource ThemeColor}"
+               HasShadow="True"
+               Padding="0"
+               HorizontalOptions="End"
+               VerticalOptions="End"
+               Margin="20">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding AddTransactionCommand}"/>
+            </Frame.GestureRecognizers>
+
+            <Label Text="+" 
+                   FontSize="32"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </Frame>
+    </Grid>
+</ContentPage>
