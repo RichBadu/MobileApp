@@ -1,9 +1,1 @@
-publishable key: sb_publishable_jT2xoyb_b4jGjLNxiwWb4Q_m-pQpYM-
 
-secret key: sb_secret_dlWs62Ni_xQDB0ywv1RxDw_ZMPPeYXF
-
-URL: https://dwzyfuhceglrsfbtadyb.supabase.co
-
-
-anon public key:
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3enlmdWhjZWdscnNmYnRhZHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2NjQ2NDksImV4cCI6MjA3OTI0MDY0OX0.lhHGeArMfM7RalJSYLfrZyRQYUebfmDEjPQqgUTFLFI
