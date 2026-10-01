@@ -1,15 +1,19 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/TZdjGXnE)
-# Naam van jouw project
+Trackeroo 
 
-## Projectbeschrijving
+A cross-platform budget tracking app built with .NET MAUI. Track your income and expenses, set budgets per category, automate recurring transactions and see where your money goes with clear statistics, online or offline.
 
-**actuele** beschrijving van wat de applicatie doet.
+Built as my final project for the Mobile Development program at Howest University of Applied Sciences (Belgium).
 
-## Extra info
-Plaats hier de nodig informatie om het
-project te kunnen uitvoeren:
+Features
+Transactions: add, edit and delete income and expenses, with optional receipt photos taken with the camera
+Categories: organise spending and set a budget per category
+Budget warnings: get notified when you're close to or over a category budget
+Recurring transactions: automate rent, subscriptions and salary
+Statistics: charts showing spending per category and across multiple months
+Offline-first: works without internet and syncs automatically once you're back online
+Authentication: secure login and registration with automatic token refresh
+Light and dark mode: full theme support through a semantic design system
 
-- API keys of nodige secrets
-- Logingegevens
-- Database configuraties
-- ...
+Architecture
+
+Trackeroo follows an offline-first approach. All data is written to a local SQLite database first, so the app stays fast and usable without a connection. A sync service pushes local changes to Supabase and pulls remote updates when the device is online.
